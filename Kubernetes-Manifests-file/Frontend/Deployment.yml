@@ -1,0 +1,29 @@
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  namespace: three-tier
+  labels:
+    role: frontend
+    env: demo
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      role: frontend
+  template:
+    metadata:
+      labels:
+        role: frontend
+    spec:
+      imagePullSecrets:
+      - name: ecr-registry-secret
+      containers:
+      - name: frontend-app
+        image: 317287358018.dkr.ecr.ap-south-1.amazonaws.com/three_tier/three-tier-front-end:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+        env:
+        - name: REACT_APP_BACKEND_URL
+          value: "http://backend.amanpathakdevops.study/api/tasks"

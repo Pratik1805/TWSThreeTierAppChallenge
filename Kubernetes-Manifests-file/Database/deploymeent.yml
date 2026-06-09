@@ -1,21 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
-metadata: 
+metadata:
   namespace: three-tier
   name: mongodb
-spec: 
+
+spec:
   replicas: 1
   selector:
     matchLabels:
       app: mongodb
   template:
     metadata:
-      labels: 
+      labels:
         app: mongodb
-    spec: 
+    spec:
       containers:
-      - name: mon
-        image: mongo:4.4.6
+      - name: mongodb
+        image: mongo:8.3.2
         command:
             - "numactl"
             - "--interleave=all"
@@ -26,21 +27,23 @@ spec:
             - "0.0.0.0"
         ports:
         - containerPort: 27017
-        env: 
-          - name: MONGO_INITDB_ROOT_USERNAME
-            valueFrom:
-              secretKeyRef:
-                name: mongo-sec
-                key: username
-          - name: MONGO_INITDB_ROOT_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                name: mongo-sec
-                key: password
+        env:
+         - name: MONGO_INITDB_ROOT_USERNAME
+           valueFrom:
+             secretKeyRef:
+               name: mongo-secret
+               key:  username
+         - name: MONGO_INITDB_ROOT_PASSWORD
+           valueFrom:
+             secretKeyRef:
+               name: mongo-secret
+               key: password
         volumeMounts:
           - name: mongo-volume
             mountPath: /data/db
-      volumes: 
-      - name: mongo-volume
-        persistentVolumeClaim:
-          claimName: mongo-volume-claim
+
+        volumes:
+        - name: mongo-volume
+          persistenVolumeClaim:
+            claimName: mongo-pvc
+

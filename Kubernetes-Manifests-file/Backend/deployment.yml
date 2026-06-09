@@ -1,0 +1,57 @@
+kind: Deployment
+apiVsersion: apps/v1
+metadata:
+  namespace: three-tier
+  name: api
+  labels:
+    role: api
+    env: demo
+spec:
+  replicas: 2
+  strategy:
+   type: RollingUpdate
+   rollingUpdate:
+     maxUnavailable: 25%
+     maxSurge: 1
+  selectors:
+    matchLabels:
+      role: api
+  template:
+    metadata:
+      labels:
+        role: api
+    spec:
+      imagePullSecrets:
+      - name: ecr-registry-secret
+      containers:
+      - name: api
+        image: 317287358018.dkr.ecr.ap-south-1.amazonaws.com/three_tier/three-tier-backend:latest
+        imagePullPolicy: Always
+        env:
+        - name: MONGO_CONN_STR
+          value: mongodb://mongo-service:27017/todo?directConnection=true
+        - name: MONGO_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: mongo-secret
+              key: username
+        - name: MONGO_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: mongo-secret
+              key: password
+        ports:
+        - containerPorts: 3500
+        livenessProbe:
+          httpGet:
+            path: /ok
+            port: 3500
+          initialDelaySeconds: 2
+          periodSeconds: 5
+        readinessProbe:
+          httpGet:
+            path: /ok
+            port: 3500
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          successThreshold: 1

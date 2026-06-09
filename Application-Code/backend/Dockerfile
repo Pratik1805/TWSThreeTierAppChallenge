@@ -1,6 +1,15 @@
-FROM node:14
-WORKDIR /usr/src/app
+FROM node:24-alpine AS builder
+
+ENV NODE_ENV=production
+
+WORKDIR /app
+
 COPY package*.json ./
-RUN npm install
-COPY . .
-CMD ["node", "index.js"]
+
+RUN npm ci --only=production
+
+COPY . . 
+
+EXPOSE 3500
+
+cmd ["node","index.js"]

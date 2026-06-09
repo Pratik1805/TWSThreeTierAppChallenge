@@ -1,0 +1,12 @@
+kind: Service
+apiVersion: v1
+metadata:
+  namespace: three-tier
+  name: frontend-service
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+  type: CusterIP
+  selector:
+    role: frontend

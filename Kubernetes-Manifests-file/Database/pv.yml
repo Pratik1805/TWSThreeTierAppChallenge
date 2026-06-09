@@ -1,13 +1,15 @@
 apiVersion: v1
-kind: PersistentVolume
+kind: PErsistentVolume
+
 metadata:
   name: mongo-pv
   namespace: three-tier
+
 spec:
-  capacity: 
+  capacity:
     storage: 1Gi
   volumeMode: Filesystem
   accessModes:
-    - ReadWriteOnce
-  hostPath:
-    path: /data/db
+  - ReadWriteOnce
+hostPath:
+  path: /data/db
