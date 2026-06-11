@@ -1,5 +1,5 @@
 apiVersion: v1
-kind: PErsistentVolume
+kind: PersistentVolume
 
 metadata:
   name: mongo-pv
@@ -11,5 +11,5 @@ spec:
   volumeMode: Filesystem
   accessModes:
   - ReadWriteOnce
-hostPath:
-  path: /data/db
+  hostPath:
+    path: /data/db

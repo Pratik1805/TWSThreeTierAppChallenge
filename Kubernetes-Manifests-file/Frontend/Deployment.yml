@@ -1,6 +1,7 @@
 kind: Deployment
 apiVersion: apps/v1
 metadata:
+  name: frontend
   namespace: three-tier
   labels:
     role: frontend
@@ -26,4 +27,4 @@ spec:
         - containerPort: 80
         env:
         - name: REACT_APP_BACKEND_URL
-          value: "http://backend.amanpathakdevops.study/api/tasks"
+          value: "http://backend.amanpathakdevops.study/api/tasks" # backend.amanpathdevops.study is a                                                                   # registred domain

@@ -1,5 +1,5 @@
 kind: Deployment
-apiVsersion: apps/v1
+apiVersion: apps/v1
 metadata:
   namespace: three-tier
   name: api
@@ -13,7 +13,7 @@ spec:
    rollingUpdate:
      maxUnavailable: 25%
      maxSurge: 1
-  selectors:
+  selector:
     matchLabels:
       role: api
   template:
@@ -41,7 +41,7 @@ spec:
               name: mongo-secret
               key: password
         ports:
-        - containerPorts: 3500
+        - containerPort: 3500
         livenessProbe:
           httpGet:
             path: /ok
